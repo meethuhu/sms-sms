@@ -9,7 +9,7 @@ async function sendCode(req, res) {
   const ip = req.ip;
 
   if (!canSendSms(phoneNumber, ip)) {
-    return res.status(429).json({ message: '发送频率过高，请稍后再试' });
+    return res.status(429).json({ message: '发送频率过高或已达到每日限制，请稍后再试' });
   }
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
