@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网盘分享系统</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="login-page">
+            <h1>登录</h1>
+            <input type="tel" id="phone-number" placeholder="请输入手机号">
+            <button id="send-code-btn">发送验证码</button>
+            <input type="text" id="verification-code" placeholder="请输入验证码">
+            <button id="verify-btn">验证</button>
+        </div>
+        <div id="guide-page" style="display: none;">
+            <h1>网盘信息</h1>
+            <p>分享密码: <span id="share-password"></span></p>
+            <button id="netdisk-link-btn">跳转到夸克网盘</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>
