@@ -2,11 +2,15 @@ const phoneInput = document.getElementById('phone-number');
 const sendCodeBtn = document.getElementById('send-code-btn');
 const codeInput = document.getElementById('verification-code');
 const verifyBtn = document.getElementById('verify-btn');
+const loginPage = document.getElementById('login-page');
+const guidePage = document.getElementById('guide-page');
+const sharePasswordSpan = document.getElementById('share-password');
+const netdiskLinkBtn = document.getElementById('netdisk-link-btn');
 const notificationElement = document.getElementById('notification');
 
 function showNotification(message, isError = false) {
   notificationElement.textContent = message;
-  notificationElement.style.display = 'block';
+  notificationElement.style.display = 'block'; // 确保元素可见
   notificationElement.classList.add('show');
   if (isError) {
     notificationElement.classList.add('error');
@@ -16,8 +20,8 @@ function showNotification(message, isError = false) {
   setTimeout(() => {
     notificationElement.classList.remove('show');
     setTimeout(() => {
-      notificationElement.style.display = 'none';
-    }, 300);
+      notificationElement.style.display = 'none'; // 隐藏元素
+    }, 300); // 等待过渡效果结束
   }, 3000);
 }
 
@@ -44,33 +48,22 @@ verifyBtn.addEventListener('click', async () => {
     return;
   }
 
-  // 添加后门逻辑
-  if (code === 'huhu') {
-    showNotification('开发模式：跳过验证');
-    redirectToNetdisk();
-    return;
-  }
-
   try {
     const response = await axios.post('/api/auth/verify-code', { phoneNumber, code });
     showNotification(response.data.message);
-    redirectToNetdisk();
+    showGuidePage();
   } catch (error) {
     showNotification(error.response.data.message || '验证失败', true);
   }
 });
 
-async function redirectToNetdisk() {
+async function showGuidePage() {
   try {
     const response = await axios.get('/api/netdisk/info');
-    const sharePassword = response.data.sharePassword;
-    const netdiskLink = response.data.netdiskLink;
-    
-    // 构建带有密码参数的 URL
-    const redirectUrl = `${netdiskLink}?pwd=${sharePassword}`;
-    
-    // 跳转到网盘页面
-    window.location.href = redirectUrl;
+    sharePasswordSpan.textContent = response.data.sharePassword;
+    netdiskLinkBtn.onclick = () => window.open(response.data.netdiskLink, '_blank');
+    loginPage.style.display = 'none';
+    guidePage.style.display = 'block';
   } catch (error) {
     showNotification('获取网盘信息失败', true);
   }
