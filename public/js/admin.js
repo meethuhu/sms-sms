@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function() {
         loadUsers(currentPage);
     });
 
+    // 初始加载用户页面
+    loadUsers(currentPage);
+
     updateNetdiskBtn.addEventListener('click', async () => {
         const share_link = netdiskLinkInput.value;
         const password = sharePasswordInput.value;

@@ -10,16 +10,10 @@
 <body>
     <div id="app">
         <nav class="nav-container">
-            <button id="netdisk-btn" class="nav-btn active">网盘信息管理</button>
-            <button id="users-btn" class="nav-btn">用户查询</button>
+            <button id="users-btn" class="nav-btn active">用户查询</button>
+            <button id="netdisk-btn" class="nav-btn">网盘信息管理</button>
         </nav>
-        <div id="netdisk-page" class="page">
-            <h1>网盘信息管理</h1>
-            <input type="text" id="netdisk-link" placeholder="新的网盘链接">
-            <input type="text" id="share-password" placeholder="新的分享密码">
-            <button id="update-netdisk-btn">更新网盘信息</button>
-        </div>
-        <div id="users-page" class="page" style="display:none;">
+        <div id="users-page" class="page">
             <div class="users-header">
                 <h1>用户查询</h1>
                 <div class="query-controls">
@@ -47,6 +41,12 @@
                 <span id="current-page">1</span>
                 <button id="next-page">下一页</button>
             </div>
+        </div>
+        <div id="netdisk-page" class="page" style="display:none;">
+            <h1>网盘信息管理</h1>
+            <input type="text" id="netdisk-link" placeholder="新的网盘链接">
+            <input type="text" id="share-password" placeholder="新的分享密码">
+            <button id="update-netdisk-btn">更新网盘信息</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
