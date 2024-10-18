@@ -1,51 +1,107 @@
-const phoneInput = document.getElementById('phone-number');
-const sendCodeBtn = document.getElementById('send-code-btn');
-const codeInput = document.getElementById('verification-code');
-const verifyBtn = document.getElementById('verify-btn');
-const notificationElement = document.getElementById('notification');
+document.addEventListener('DOMContentLoaded', function() {
+  const netdiskBtn = document.getElementById('netdisk-btn');
+  const usersBtn = document.getElementById('users-btn');
+  const netdiskPage = document.getElementById('netdisk-page');
+  const usersPage = document.getElementById('users-page');
+  const updateNetdiskBtn = document.getElementById('update-netdisk-btn');
+  const netdiskLinkInput = document.getElementById('netdisk-link');
+  const sharePasswordInput = document.getElementById('share-password');
+  const usersTable = document.getElementById('users-table').getElementsByTagName('tbody')[0];
+  const prevPageBtn = document.getElementById('prev-page');
+  const nextPageBtn = document.getElementById('next-page');
+  const currentPageSpan = document.getElementById('current-page');
+  const sortSelect = document.getElementById('sort-select');
+  const startDateInput = document.getElementById('start-date');
+  const endDateInput = document.getElementById('end-date');
+  const queryBtn = document.getElementById('query-btn');
 
-function showNotification(message, isError = false) {
-  notificationElement.textContent = message;
-  notificationElement.style.display = 'block';
-  notificationElement.classList.add('show', isError ? 'error' : 'success');
-  
-  setTimeout(() => {
-    notificationElement.classList.remove('show', 'error', 'success');
-    setTimeout(() => notificationElement.style.display = 'none', 300);
-  }, 3000);
-}
+  let currentPage = 1;
+  const pageSize = 50;
+  let currentSortField = 'lastLoginTime';
+  let startDate = '';
+  let endDate = '';
 
-async function handleRequest(url, data, successMessage) {
-  try {
-    const response = await axios.post(url, data);
-    showNotification(successMessage || response.data.message);
-    return response.data;
-  } catch (error) {
-    showNotification(error.response?.data.message || '操作失败', true);
-    throw error;
+  // 默认显示用户查询页面
+  loadUsers(currentPage);
+
+  netdiskBtn.addEventListener('click', () => {
+      netdiskPage.style.display = 'block';
+      usersPage.style.display = 'none';
+      netdiskBtn.classList.add('active');
+      usersBtn.classList.remove('active');
+  });
+
+  usersBtn.addEventListener('click', () => {
+      netdiskPage.style.display = 'none';
+      usersPage.style.display = 'block';
+      netdiskBtn.classList.remove('active');
+      usersBtn.classList.add('active');
+      loadUsers(currentPage);
+  });
+
+  updateNetdiskBtn.addEventListener('click', async () => {
+      const netdiskLink = netdiskLinkInput.value;
+      const sharePassword = sharePasswordInput.value;
+      try {
+          const response = await axios.post('/api/admin/update-netdisk', { netdiskLink, sharePassword });
+          alert(response.data.message);
+      } catch (error) {
+          alert('更新失败: ' + error.response.data.message);
+      }
+  });
+
+  sortSelect.addEventListener('change', function() {
+      currentSortField = this.value;
+      currentPage = 1;
+      loadUsers(currentPage);
+  });
+
+  queryBtn.addEventListener('click', () => {
+      startDate = startDateInput.value;
+      endDate = endDateInput.value;
+      currentPage = 1;
+      loadUsers(currentPage);
+  });
+
+  async function loadUsers(page) {
+      try {
+          const response = await axios.get('/api/admin/users', {
+              params: {
+                  page,
+                  pageSize,
+                  sortBy: currentSortField,
+                  startDate,
+                  endDate
+              }
+          });
+          const users = response.data.users;
+          const totalPages = response.data.totalPages;
+
+          usersTable.innerHTML = '';
+          users.forEach(user => {
+              const row = usersTable.insertRow();
+              row.insertCell(0).textContent = user.phoneNumber;
+              row.insertCell(1).textContent = new Date(user.lastLoginTime).toLocaleString();
+              row.insertCell(2).textContent = new Date(user.createdAt).toLocaleString();
+          });
+
+          currentPageSpan.textContent = page;
+          prevPageBtn.disabled = page === 1;
+          nextPageBtn.disabled = page === totalPages;
+      } catch (error) {
+          alert('加载用户数据失败: ' + error.response.data.message);
+      }
   }
-}
 
-sendCodeBtn.addEventListener('click', async () => {
-  const phoneNumber = phoneInput.value;
-  if (!phoneNumber) {
-    return showNotification('请输入手机号', true);
-  }
-  await handleRequest('/api/auth/send-code', { phoneNumber }, '验证码已发送');
-});
+  prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+          currentPage--;
+          loadUsers(currentPage);
+      }
+  });
 
-verifyBtn.addEventListener('click', async () => {
-  const phoneNumber = phoneInput.value;
-  const code = codeInput.value;
-  if (!phoneNumber || !code) {
-    return showNotification('请输入手机号和验证码', true);
-  }
-
-  try {
-    await handleRequest('/api/auth/verify-code', { phoneNumber, code }, '验证成功');
-    const { netdiskLink } = await axios.get('/api/netdisk/info').then(res => res.data);
-    window.location.href = netdiskLink;
-  } catch (error) {
-    console.error('验证或获取网盘信息失败:', error);
-  }
+  nextPageBtn.addEventListener('click', () => {
+      currentPage++;
+      loadUsers(currentPage);
+  });
 });

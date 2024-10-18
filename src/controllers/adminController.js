@@ -4,8 +4,8 @@ const { Op } = require('sequelize');
 
 exports.updateNetdiskInfo = async (req, res) => {
     try {
-        const { netdiskLink, sharePassword } = req.body;
-        await NetdiskInfo.update({ netdiskLink, sharePassword }, { where: {} });
+        const { netdiskLink, password } = req.body;
+        await NetdiskInfo.update({ shareLink: netdiskLink, password }, { where: {} });
         res.json({ message: '网盘信息更新成功' });
     } catch (error) {
         console.error('更新网盘信息失败:', error);
