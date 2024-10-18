@@ -14,12 +14,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('start-date');
     const endDateInput = document.getElementById('end-date');
     const queryBtn = document.getElementById('query-btn');
+    const totalPagesSpan = document.getElementById('total-pages');
+    const pageInput = document.getElementById('page-input');
+    const goToPageBtn = document.getElementById('go-to-page');
 
     let currentPage = 1;
     const pageSize = 50;
     let currentSortField = 'lastLoginTime';
     let startDate = '';
     let endDate = '';
+    let totalPages = 1;
 
     netdiskBtn.addEventListener('click', () => {
         netdiskPage.style.display = 'block';
@@ -63,6 +67,16 @@ document.addEventListener('DOMContentLoaded', function() {
         loadUsers(currentPage);
     });
 
+    goToPageBtn.addEventListener('click', () => {
+        const pageNumber = parseInt(pageInput.value);
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            currentPage = pageNumber;
+            loadUsers(currentPage);
+        } else {
+            alert('请输入有效的页码');
+        }
+    });
+
     async function loadUsers(page) {
         try {
             const response = await axios.get('/api/admin/users', {
@@ -75,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             const users = response.data.users;
-            const totalPages = response.data.totalPages;
+            totalPages = response.data.totalPages;
 
             usersTable.innerHTML = '';
             users.forEach(user => {
@@ -86,8 +100,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             currentPageSpan.textContent = page;
+            totalPagesSpan.textContent = `共 ${totalPages} 页`;
             prevPageBtn.disabled = page === 1;
             nextPageBtn.disabled = page === totalPages;
+            pageInput.max = totalPages;
         } catch (error) {
             alert('加载用户数据失败: ' + error.response.data.message);
         }

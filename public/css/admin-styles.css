@@ -55,9 +55,10 @@ button:hover {
 
 .users-header {
     display: flex;
+    flex-flow: row wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .users-header h1 {
@@ -87,19 +88,34 @@ th {
 #pagination {
     margin-top: 20px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#pagination button {
-    display: inline-block;
-    width: auto;
+#pagination button,
+#pagination input {
+    margin: 0 5px;
+}
+
+#pagination input[type="number"] {
+    width: 60px;
+}
+
+#total-pages {
     margin: 0 10px;
+}
+
+#go-to-page {
+    padding: 5px 10px;
 }
 
 .query-controls {
     display: flex;
     gap: 10px;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: center;
+    /* margin-bottom: 10px; */
 }
 
 .query-controls input[type="date"],
@@ -115,4 +131,18 @@ th {
 
 .query-controls button {
     width: auto;
+}
+
+#pagination{
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+#pagination button{
+    width: 4rem;
+    height: 2.2rem;
+}
+
+#page-input{
+    width: 4rem !important;
 }
