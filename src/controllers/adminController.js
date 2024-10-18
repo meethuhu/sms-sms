@@ -1,6 +1,17 @@
 const NetdiskInfo = require('../models/NetdiskInfo');
 const User = require('../models/User');
 const { Op } = require('sequelize');
+require('dotenv').config();
+
+exports.login = (req, res) => {
+    const { password } = req.body;
+    if (password === process.env.ADMIN_PASSWORD) {
+        req.session.isAdminAuthenticated = true;
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
+    }
+};
 
 exports.updateNetdiskInfo = async (req, res) => {
     try {
