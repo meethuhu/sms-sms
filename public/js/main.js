@@ -43,8 +43,8 @@ verifyBtn.addEventListener('click', async () => {
 
   try {
     await handleRequest('/api/auth/verify-code', { phoneNumber, code }, '验证成功');
-    const { netdiskLink } = await axios.get('/api/netdisk/info').then(res => res.data);
-    window.location.href = netdiskLink;
+    const { share_link } = await axios.get('/api/netdisk/info').then(res => res.data);
+    window.location.href = share_link;
   } catch (error) {
     console.error('验证或获取网盘信息失败:', error);
   }

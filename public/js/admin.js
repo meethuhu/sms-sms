@@ -37,10 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     updateNetdiskBtn.addEventListener('click', async () => {
-        const netdiskLink = netdiskLinkInput.value;
-        const sharePassword = sharePasswordInput.value;
+        const share_link = netdiskLinkInput.value;
+        const password = sharePasswordInput.value;
         try {
-            const response = await axios.post('/api/admin/update-netdisk', { netdiskLink, sharePassword });
+            const response = await axios.post('/api/admin/update-netdisk', { share_link, password });
             alert(response.data.message);
         } catch (error) {
             alert('更新失败: ' + error.response.data.message);
