@@ -24,16 +24,6 @@ async function startServer() {
     await sequelize.sync();
     console.log('数据库同步完成');
 
-    // 检查 NetdiskInfo 表是否为空，如果为空则插入初始数据
-    const count = await NetdiskInfo.count();
-    if (count === 0) {
-      await NetdiskInfo.create({
-        sharePassword: 'gNTv',
-        netdiskLink: 'https://pan.quark.cn/s/57e3e9071826'
-      });
-      console.log('初始网盘信息已插入');
-    }
-
     app.listen(PORT, () => {
       console.log(`服务器运行在 http://localhost:${PORT}`);
     });
