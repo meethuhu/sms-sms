@@ -6,8 +6,8 @@ async function getNetdiskInfo(req, res) {
     
     if (netdiskInfo) {
       res.json({
-        password: netdiskInfo.password,
-        netdiskLink: netdiskInfo.shareLink
+        sharePassword: netdiskInfo.sharePassword,
+        netdiskLink: netdiskInfo.netdiskLink
       });
     } else {
       res.status(404).json({ message: '网盘信息未找到' });

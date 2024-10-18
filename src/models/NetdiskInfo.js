@@ -7,20 +7,14 @@ const NetdiskInfo = sequelize.define('NetdiskInfo', {
     primaryKey: true,
     autoIncrement: true
   },
-  shareLink: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-    field: 'share_link'
-  },
-  password: {
+  sharePassword: {
     type: DataTypes.STRING(50),
-    allowNull: true
+    allowNull: false
+  },
+  netdiskLink: {
+    type: DataTypes.STRING(255),
+    allowNull: false
   }
-}, {
-  tableName: 'netdiskinfo',
-  timestamps: true,
-  updatedAt: 'updated_at',
-  createdAt: false
 });
 
 module.exports = NetdiskInfo;
