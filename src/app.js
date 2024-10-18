@@ -15,6 +15,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/netdisk', netdiskRoutes);
 app.use('/api/admin', adminRoutes);
 
+// 更新 /@admin 路由
+app.get('/@admin', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/@admin.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
