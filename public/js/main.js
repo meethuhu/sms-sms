@@ -2,69 +2,50 @@ const phoneInput = document.getElementById('phone-number');
 const sendCodeBtn = document.getElementById('send-code-btn');
 const codeInput = document.getElementById('verification-code');
 const verifyBtn = document.getElementById('verify-btn');
-const loginPage = document.getElementById('login-page');
-const guidePage = document.getElementById('guide-page');
-const sharePasswordSpan = document.getElementById('share-password');
-const netdiskLinkBtn = document.getElementById('netdisk-link-btn');
 const notificationElement = document.getElementById('notification');
 
 function showNotification(message, isError = false) {
   notificationElement.textContent = message;
-  notificationElement.style.display = 'block'; // 确保元素可见
-  notificationElement.classList.add('show');
-  if (isError) {
-    notificationElement.classList.add('error');
-  } else {
-    notificationElement.classList.remove('error');
-  }
+  notificationElement.style.display = 'block';
+  notificationElement.classList.add('show', isError ? 'error' : 'success');
+  
   setTimeout(() => {
-    notificationElement.classList.remove('show');
-    setTimeout(() => {
-      notificationElement.style.display = 'none'; // 隐藏元素
-    }, 300); // 等待过渡效果结束
+    notificationElement.classList.remove('show', 'error', 'success');
+    setTimeout(() => notificationElement.style.display = 'none', 300);
   }, 3000);
+}
+
+async function handleRequest(url, data, successMessage) {
+  try {
+    const response = await axios.post(url, data);
+    showNotification(successMessage || response.data.message);
+    return response.data;
+  } catch (error) {
+    showNotification(error.response?.data.message || '操作失败', true);
+    throw error;
+  }
 }
 
 sendCodeBtn.addEventListener('click', async () => {
   const phoneNumber = phoneInput.value;
   if (!phoneNumber) {
-    showNotification('请输入手机号', true);
-    return;
+    return showNotification('请输入手机号', true);
   }
-
-  try {
-    const response = await axios.post('/api/auth/send-code', { phoneNumber });
-    showNotification(response.data.message);
-  } catch (error) {
-    showNotification(error.response.data.message || '发送验证码失败', true);
-  }
+  await handleRequest('/api/auth/send-code', { phoneNumber }, '验证码已发送');
 });
 
 verifyBtn.addEventListener('click', async () => {
   const phoneNumber = phoneInput.value;
   const code = codeInput.value;
   if (!phoneNumber || !code) {
-    showNotification('请输入手机号和验证码', true);
-    return;
+    return showNotification('请输入手机号和验证码', true);
   }
 
   try {
-    const response = await axios.post('/api/auth/verify-code', { phoneNumber, code });
-    showNotification(response.data.message);
-    showGuidePage();
+    await handleRequest('/api/auth/verify-code', { phoneNumber, code }, '验证成功');
+    const { netdiskLink } = await axios.get('/api/netdisk/info').then(res => res.data);
+    window.location.href = netdiskLink;
   } catch (error) {
-    showNotification(error.response.data.message || '验证失败', true);
+    console.error('验证或获取网盘信息失败:', error);
   }
 });
-
-async function showGuidePage() {
-  try {
-    const response = await axios.get('/api/netdisk/info');
-    sharePasswordSpan.textContent = response.data.sharePassword;
-    netdiskLinkBtn.onclick = () => window.open(response.data.netdiskLink, '_blank');
-    loginPage.style.display = 'none';
-    guidePage.style.display = 'block';
-  } catch (error) {
-    showNotification('获取网盘信息失败', true);
-  }
-}
