@@ -4,14 +4,16 @@ const authRoutes = require('./routes/auth');
 const netdiskRoutes = require('./routes/netdisk');
 const sequelize = require('./config/database');
 const NetdiskInfo = require('./models/NetdiskInfo');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); 
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/netdisk', netdiskRoutes);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 3000;
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员页面</title>
+    <link rel="stylesheet" href="/css/admin-styles.css">
+</head>
+<body>
+    <div id="app">
+        <nav class="nav-container">
+            <button id="netdisk-btn" class="nav-btn active">网盘信息管理</button>
+            <button id="users-btn" class="nav-btn">用户查询</button>
+        </nav>
+        <div id="netdisk-page" class="page">
+            <h1>网盘信息管理</h1>
+            <input type="text" id="netdisk-link" placeholder="新的网盘链接">
+            <input type="text" id="share-password" placeholder="新的分享密码">
+            <button id="update-netdisk-btn">更新网盘信息</button>
+        </div>
+        <div id="users-page" class="page" style="display:none;">
+            <div class="users-header">
+                <h1>用户查询</h1>
+                <div class="query-controls">
+                    <select id="sort-select">
+                        <option value="lastLoginTime">按最后登录时间排序</option>
+                        <option value="createdAt">按注册时间排序</option>
+                    </select>
+                    <input type="date" id="start-date" placeholder="开始日期">
+                    <input type="date" id="end-date" placeholder="结束日期">
+                    <button id="query-btn">查询</button>
+                </div>
+            </div>
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>手机号</th>
+                        <th>最后登录时间</th>
+                        <th>首次注册时间</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="pagination">
+                <button id="prev-page">上一页</button>
+                <span id="current-page">1</span>
+                <button id="next-page">下一页</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>
