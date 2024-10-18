@@ -20,6 +20,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
+    margin: 1em;
 }
 
 h1 {
@@ -33,6 +34,7 @@ input, button {
     margin-bottom: 1rem;
     padding: 0.5rem;
     font-size: 1rem;
+    border-radius: 3px;
 }
 
 button {
@@ -41,6 +43,9 @@ button {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+input{
+    border: 1px solid #ccc;
 }
 
 button:hover {
@@ -53,12 +58,12 @@ button:hover {
 
 .notification {
     position: fixed;
-    top: 20px;
+    top: 20vh;
     left: 50%;
     transform: translateX(-50%);
     background-color: #4CAF50;
     color: white;
-    padding: 15px;
+    padding: .5em;
     text-align: center;
     border-radius: 5px;
     opacity: 0;
@@ -74,3 +79,28 @@ button:hover {
 .notification.error {
     background-color: #f44336;
 }
+
+#login-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.yzm{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.yzm input{
+    flex: 3;
+    margin-right: .5em;
+}
+
+.yzm button{
+    flex: 2;
+    background-color: #aaa;
+}
+
