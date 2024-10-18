@@ -4,14 +4,25 @@
     box-sizing: border-box;
 }
 
-body {
+main {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
     margin: 0;
     background-color: #f0f0f0;
+}
+footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: center;
+    height: 10vh;
+    background-color: #f0f0f0;
+    font-size: .8em;
+    color: #999aaa;
+    padding-bottom: 1em;
 }
 
 #app {
@@ -58,7 +69,7 @@ button:hover {
 
 .notification {
     position: fixed;
-    top: 20vh;
+    top: 10vh;
     left: 50%;
     transform: translateX(-50%);
     background-color: #4CAF50;
