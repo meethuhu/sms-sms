@@ -1,9 +1,17 @@
+# 环境变量
+```env
+# 数据库配置
 DB_HOST=  
 DB_USER=  
 DB_PASS=  
 DB_NAME=  
+
+# 阿里云短信服务
 ALIYUN_ACCESS_KEY_ID=  
 ALIYUN_ACCESS_KEY_SECRET=  
 ALIYUN_SMS_SIGN_NAME=  
 ALIYUN_SMS_TEMPLATE_CODE=  
+
+# 每日短信限制
 DAILY_SMS_LIMIT_PER_IP=  
+```
