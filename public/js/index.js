@@ -4,6 +4,10 @@ const codeInput = document.getElementById('verification-code');
 const verifyBtn = document.getElementById('verify-btn');
 const notificationElement = document.getElementById('notification');
 
+// 添加倒计时变量
+let countdown = 0;
+let countdownInterval;
+
 function showNotification(message, isError = false) {
   notificationElement.textContent = message;
   notificationElement.style.display = 'block';
@@ -26,12 +30,38 @@ async function handleRequest(url, data, successMessage) {
   }
 }
 
+function startCountdown() {
+  countdown = 60;
+  sendCodeBtn.disabled = true;
+  updateCountdownButton();
+
+  countdownInterval = setInterval(() => {
+    countdown--;
+    if (countdown <= 0) {
+      clearInterval(countdownInterval);
+      sendCodeBtn.disabled = false;
+      sendCodeBtn.textContent = '获取验证码';
+    } else {
+      updateCountdownButton();
+    }
+  }, 1000);
+}
+
+function updateCountdownButton() {
+  sendCodeBtn.textContent = `${countdown}秒后重试`;
+}
+
 sendCodeBtn.addEventListener('click', async () => {
   const phoneNumber = phoneInput.value;
   if (!phoneNumber) {
     return showNotification('请输入手机号', true);
   }
-  await handleRequest('/api/auth/send-code', { phoneNumber }, '验证码已发送');
+  try {
+    await handleRequest('/api/auth/send-code', { phoneNumber }, '验证码已发送');
+    startCountdown();
+  } catch (error) {
+    console.error('发送验证码失败:', error);
+  }
 });
 
 verifyBtn.addEventListener('click', async () => {
