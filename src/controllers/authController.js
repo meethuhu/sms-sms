@@ -3,6 +3,7 @@ const { canSendSms } = require('../utils/rateLimiter');
 const User = require('../models/User');
 const SmsLog = require('../models/SmsLog');
 const { Op } = require('sequelize');
+const logger = require('../utils/logger');
 
 async function sendCode(req, res) {
   const { phoneNumber } = req.body;
@@ -13,11 +14,16 @@ async function sendCode(req, res) {
   }
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const success = await sendSms(phoneNumber, code);
-
-  if (success) {
-    res.json({ message: '验证码已发送' });
-  } else {
+  try {
+    const success = await sendSms(phoneNumber, code);
+    if (success) {
+      res.json({ message: '验证码已发送' });
+    } else {
+      logger.error(`Failed to send SMS to ${phoneNumber}`);
+      res.status(500).json({ message: '发送验证码失败' });
+    }
+  } catch (error) {
+    logger.error('Error in sendCode:', error);
     res.status(500).json({ message: '发送验证码失败' });
   }
 }

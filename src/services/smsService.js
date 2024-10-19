@@ -1,6 +1,7 @@
 const Core = require('@alicloud/pop-core');
 const SmsLog = require('../models/SmsLog');
 require('dotenv').config();
+const logger = require('../utils/logger'); // 假设您有一个日志工具
 
 const client = new Core({
   accessKeyId: process.env.ALIYUN_ACCESS_KEY_ID,
@@ -28,9 +29,10 @@ async function sendSms(phoneNumber, code) {
       });
       return true;
     }
+    logger.error(`SMS sending failed: ${result.Code} - ${result.Message}`);
     return false;
   } catch (error) {
-    console.error('发送短信失败:', error);
+    logger.error('发送短信失败:', error);
     return false;
   }
 }
