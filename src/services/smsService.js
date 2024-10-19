@@ -1,5 +1,6 @@
 const Core = require('@alicloud/pop-core');
 const SmsLog = require('../models/SmsLog');
+const logger = require('../utils/logger');
 require('dotenv').config();
 
 const client = new Core({
@@ -26,11 +27,13 @@ async function sendSms(phoneNumber, code) {
         sentAt: new Date(),
         expiresAt: new Date(Date.now() + 5 * 60 * 1000) // 5分钟后过期
       });
+      logger.info(`SMS sent successfully to ${phoneNumber}`);
       return true;
     }
+    logger.error(`SMS sending failed: ${result.Code} - ${result.Message}`);
     return false;
   } catch (error) {
-    console.error('发送短信失败:', error);
+    logger.error('发送短信失败:', error);
     return false;
   }
 }

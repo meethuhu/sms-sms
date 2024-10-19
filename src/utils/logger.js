@@ -1,22 +1,25 @@
-const winston = require('winston');
+const fs = require('fs');
 const path = require('path');
 
-const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.File({ filename: path.join(__dirname, '../logs/error.log'), level: 'error' }),
-    new winston.transports.File({ filename: path.join(__dirname, '../logs/combined.log') }),
-  ],
-});
+const logFile = path.join(__dirname, '../../logs/app.log');
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
-  }));
+function ensureLogDirectory() {
+  const dir = path.dirname(logFile);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 }
 
-module.exports = logger;
+function log(level, message) {
+  ensureLogDirectory();
+  const timestamp = new Date().toISOString();
+  const logMessage = `${timestamp} [${level}]: ${message}\n`;
+  fs.appendFileSync(logFile, logMessage);
+  console.log(logMessage); // 同时输出到控制台
+}
+
+module.exports = {
+  error: (message) => log('ERROR', message),
+  info: (message) => log('INFO', message),
+  warn: (message) => log('WARN', message),
+};
