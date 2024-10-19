@@ -16,7 +16,7 @@
 .nav-btn {
     flex: 1;
     padding: 10px 20px;
-    background-color: #f0f0f0;
+    background-color: #aaa;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -112,6 +112,7 @@ th {
 
 .query-controls {
     display: flex;
+    flex-flow: row wrap;
     gap: 10px;
     align-items: center;
     justify-content: center;
@@ -139,10 +140,73 @@ th {
 }
 
 #pagination button{
-    width: 4rem;
+    /* width: 4rem; */
+    width: auto;
     height: 2.2rem;
 }
 
 #page-input{
     width: 4rem !important;
+}
+
+/* 保留原有的样式 */
+
+/* 修改表格行的交替背景色为蓝色系 */
+#users-table tbody tr:nth-child(odd) {
+    background-color: #e6f2ff; /* 浅蓝色 */
+}
+
+#users-table tbody tr:nth-child(even) {
+    background-color: #a2ccf0; /* 更浅的蓝色 */
+}
+
+/* 为了确保文字在浅色背景上清晰可见，我们可以设置文字颜色 */
+#users-table tbody tr {
+    color: #333; /* 深灰色文字 */
+}
+
+/* 当鼠标悬停在行上时改变背景色，以提高可读性 */
+#users-table tbody tr:hover {
+    background-color: #425d7a; /* 稍深一点的蓝色 */
+    color: #ffffff;
+}
+
+#users-table thead th{
+    background-color: #70afe7;
+}
+
+/* 可以为表头设置一个稍深的蓝色，以区分表头和内容 */
+#users-table thead tr {
+    background-color: #4a90e2; /* 中等深度的蓝色 */
+}
+
+/* 为表格添加一个浅蓝色边框 */
+#users-table {
+    border: 1px solid #b3d9ff;
+}
+
+/* 调整单元格边框颜色 */
+#users-table th, #users-table td {
+    border: 1px solid #d9eaff;
+}
+
+.button-group{
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+    body{
+        font-size: 13px;
+    }
+    #app{
+        max-width: auto;
+        padding: 20px;
+        margin: auto;
+        border-radius: 0;
+        box-shadow: none;
+    }
 }

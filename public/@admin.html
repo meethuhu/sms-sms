@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/admin-styles.css">
 </head>
+
 <body>
     <div id="app">
         <nav class="nav-container">
@@ -18,17 +20,21 @@
                 <h1>用户查询</h1>
                 <div class="query-controls">
                     <select id="sort-select">
-                        <option value="lastLoginTime">按最后登录时间排序</option>
-                        <option value="createdAt">按注册时间排序</option>
+                        <option value="lastLoginTime">登录时间降序</option>
+                        <option value="createdAt">注册时间降序</option>
                     </select>
                     <input type="date" id="start-date" placeholder="开始日期">
                     <input type="date" id="end-date" placeholder="结束日期">
-                    <button id="query-btn">查询</button>
+                    <div class="button-group"> 
+                        <button id="query-btn">查询</button>
+                        <button id="today-btn">今天</button>
+                    </div>
                 </div>
             </div>
             <table id="users-table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>手机号</th>
                         <th>最后登录时间</th>
                         <th>首次注册时间</th>
@@ -48,11 +54,12 @@
         <div id="netdisk-page" class="page" style="display:none;">
             <h1>网盘信息管理</h1>
             <input type="text" id="netdisk-link" placeholder="新的网盘链接">
-            <input type="text" id="share-password" placeholder="新的分享密码">
+            <!-- <input type="text" id="share-password" placeholder="新的分享密码"> -->
             <button id="update-netdisk-btn">更新网盘信息</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/admin.js"></script>
 </body>
+
 </html>

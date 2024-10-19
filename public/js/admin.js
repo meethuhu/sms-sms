@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalPagesSpan = document.getElementById('total-pages');
     const pageInput = document.getElementById('page-input');
     const goToPageBtn = document.getElementById('go-to-page');
+    const todayBtn = document.getElementById('today-btn');
 
     let currentPage = 1;
     const pageSize = 50;
@@ -67,6 +68,18 @@ document.addEventListener('DOMContentLoaded', function() {
         loadUsers(currentPage);
     });
 
+    todayBtn.addEventListener('click', () => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);  // 设置时间为当天的开始
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        startDateInput.value = formatDate(today);
+        endDateInput.value = formatDate(tomorrow);
+        currentPage = 1;
+        loadUsers(currentPage);
+    });
+
     goToPageBtn.addEventListener('click', () => {
         const pageNumber = parseInt(pageInput.value);
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -77,6 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     async function loadUsers(page) {
         try {
             const response = await axios.get('/api/admin/users', {
@@ -84,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     page,
                     pageSize,
                     sortBy: currentSortField,
-                    startDate,
-                    endDate
+                    startDate: startDateInput.value,
+                    endDate: endDateInput.value
                 }
             });
             const users = response.data.users;
@@ -94,9 +114,10 @@ document.addEventListener('DOMContentLoaded', function() {
             usersTable.innerHTML = '';
             users.forEach(user => {
                 const row = usersTable.insertRow();
-                row.insertCell(0).textContent = user.phoneNumber;
-                row.insertCell(1).textContent = new Date(user.lastLoginTime).toLocaleString();
-                row.insertCell(2).textContent = new Date(user.createdAt).toLocaleString();
+                row.insertCell(0).textContent = user.id;
+                row.insertCell(1).textContent = user.phoneNumber;
+                row.insertCell(2).textContent = formatDateTime(new Date(user.lastLoginTime));
+                row.insertCell(3).textContent = formatDateTime(new Date(user.createdAt));
             });
 
             currentPageSpan.textContent = page;
@@ -107,6 +128,18 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             alert('加载用户数据失败: ' + error.response.data.message);
         }
+    }
+
+    function formatDateTime(date) {
+        return date.toLocaleString('zh-CN', { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Shanghai'  // 使用中国时区
+        });
     }
 
     prevPageBtn.addEventListener('click', () => {

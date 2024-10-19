@@ -41,7 +41,7 @@ exports.getUsers = async (req, res) => {
         }
 
         const { count, rows } = await User.findAndCountAll({
-            attributes: ['phoneNumber', 'lastLoginTime', 'createdAt'],
+            attributes: ['id', 'phoneNumber', 'lastLoginTime', 'createdAt'],
             where: whereClause,
             order: [[sortBy, 'DESC']],
             limit: pageSize,
