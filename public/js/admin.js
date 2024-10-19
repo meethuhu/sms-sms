@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     sortSelect.addEventListener('change', function() {
         currentSortField = this.value;
+        startDateInput.value = '';
+        endDateInput.value = '';
         currentPage = 1;
         loadUsers(currentPage);
     });
@@ -74,8 +76,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
         
-        startDateInput.value = formatDate(today);
-        endDateInput.value = formatDate(tomorrow);
+        if (currentSortField === 'lastLoginTime') {
+            // 如果是按最后登录时间排序，我们查询今天的登录
+            startDateInput.value = formatDate(today);
+            endDateInput.value = formatDate(tomorrow);
+        } else if (currentSortField === 'createdAt') {
+            // 如果是按注册时间排序，我们查询今天的注册
+            startDateInput.value = formatDate(today);
+            endDateInput.value = formatDate(tomorrow);
+        }
         currentPage = 1;
         loadUsers(currentPage);
     });
@@ -104,8 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     page,
                     pageSize,
                     sortBy: currentSortField,
-                    startDate: startDateInput.value,
-                    endDate: endDateInput.value
+                    startDate: startDateInput.value || undefined, // 如果为空字符串，则发送 undefined
+                    endDate: endDateInput.value || undefined
                 }
             });
             const users = response.data.users;

@@ -1,6 +1,7 @@
 const NetdiskInfo = require('../models/NetdiskInfo');
 const User = require('../models/User');
 const { Op } = require('sequelize');
+const moment = require('moment-timezone');
 require('dotenv').config();
 
 exports.login = (req, res) => {
@@ -36,7 +37,10 @@ exports.getUsers = async (req, res) => {
         let whereClause = {};
         if (startDate && endDate) {
             whereClause[sortBy] = {
-                [Op.between]: [new Date(startDate), new Date(endDate)]
+                [Op.between]: [
+                    moment.tz(startDate, "Asia/Shanghai").startOf('day').toDate(),
+                    moment.tz(endDate, "Asia/Shanghai").endOf('day').toDate()
+                ]
             };
         }
 
