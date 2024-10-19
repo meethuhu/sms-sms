@@ -9,8 +9,7 @@ CREATE TABLE IF NOT EXISTS Users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   phoneNumber VARCHAR(20) NOT NULL UNIQUE,
   lastLoginTime DATETIME NOT NULL,
-  createdAt DATETIME NOT NULL,
-  updatedAt DATETIME NOT NULL
+  createdAt DATETIME NOT NULL
 );
 
 -- 创建短信日志表
@@ -25,32 +24,19 @@ CREATE TABLE IF NOT EXISTS SmsLogs (
   updatedAt DATETIME NOT NULL
 );
 
--- 插入一些测试数据（可选）
-INSERT INTO Users (phoneNumber, lastLoginTime, createdAt, updatedAt)
-VALUES 
-('13800000000', NOW(), NOW(), NOW()),
-('13900000000', NOW(), NOW(), NOW());
+-- 创建新的网盘信息表
+CREATE TABLE `netdiskinfo` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `share_link` varchar(255) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO SmsLogs (phoneNumber, code, sentAt, expiresAt, isUsed, createdAt, updatedAt)
-VALUES 
-('13800000000', '123456', NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE), FALSE, NOW(), NOW()),
-('13900000000', '654321', NOW(), DATE_ADD(NOW(), INTERVAL 5 MINUTE), FALSE, NOW(), NOW());
+-- 插入初始网盘信息
+INSERT INTO `netdiskinfo` (`share_link`) 
+VALUES ('https://pan.quark.cn/');
 
 -- 创建索引以提高查询性能
 CREATE INDEX idx_phone_number ON Users (phoneNumber);
 CREATE INDEX idx_phone_code ON SmsLogs (phoneNumber, code);
 CREATE INDEX idx_expires_at ON SmsLogs (expiresAt);
-
--- 创建网盘信息表
-CREATE TABLE IF NOT EXISTS NetdiskInfo (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  sharePassword VARCHAR(50) NOT NULL,
-  netdiskLink VARCHAR(255) NOT NULL,
-  createdAt DATETIME NOT NULL,
-  updatedAt DATETIME NOT NULL
-);
-
--- 插入初始网盘信息
-INSERT INTO NetdiskInfo (sharePassword, netdiskLink, createdAt, updatedAt)
-VALUES 
-('gNTv', 'https://pan.quark.cn/s/57e3e9071826', NOW(), NOW());
