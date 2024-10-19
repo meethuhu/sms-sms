@@ -40,13 +40,14 @@ async function verifyCode(req, res) {
 
   await smsLog.update({ isUsed: true });
 
+  const now = new Date();
   const [user, created] = await User.findOrCreate({
     where: { phoneNumber },
-    defaults: { lastLoginTime: new Date() }
+    defaults: { lastLoginTime: now, createdAt: now }
   });
 
   if (!created) {
-    await user.update({ lastLoginTime: new Date() });
+    await user.update({ lastLoginTime: now });
   }
 
   res.json({ message: '验证成功' });

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentPage = 1;
     const pageSize = 50;
-    let currentSortField = 'lastLoginTime';
+    let currentSortField = 'createdAt';  // 默认排序字段改为 createdAt
     let startDate = '';
     let endDate = '';
     let totalPages = 1;
@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
         usersPage.style.display = 'block';
         netdiskBtn.classList.remove('active');
         usersBtn.classList.add('active');
-        loadUsers(currentPage);
+        loadUsers(currentPage, currentSortField);
     });
 
     // 初始加载用户页面
-    loadUsers(currentPage);
+    loadUsers(currentPage, currentSortField);
 
     updateNetdiskBtn.addEventListener('click', async () => {
         const share_link = netdiskLinkInput.value;
@@ -60,14 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
         startDateInput.value = '';
         endDateInput.value = '';
         currentPage = 1;
-        loadUsers(currentPage);
+        loadUsers(currentPage, currentSortField);
     });
 
     queryBtn.addEventListener('click', () => {
         startDate = startDateInput.value;
         endDate = endDateInput.value;
         currentPage = 1;
-        loadUsers(currentPage);
+        loadUsers(currentPage, currentSortField);
     });
 
     todayBtn.addEventListener('click', () => {
@@ -86,14 +86,14 @@ document.addEventListener('DOMContentLoaded', function() {
             endDateInput.value = formatDate(tomorrow);
         }
         currentPage = 1;
-        loadUsers(currentPage);
+        loadUsers(currentPage, currentSortField);
     });
 
     goToPageBtn.addEventListener('click', () => {
         const pageNumber = parseInt(pageInput.value);
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             currentPage = pageNumber;
-            loadUsers(currentPage);
+            loadUsers(currentPage, currentSortField);
         } else {
             alert('请输入有效的页码');
         }
@@ -106,14 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${year}-${month}-${day}`;
     }
 
-    async function loadUsers(page) {
+    async function loadUsers(page, sortBy) {
         try {
             const response = await axios.get('/api/admin/users', {
                 params: {
                     page,
                     pageSize,
-                    sortBy: currentSortField,
-                    startDate: startDateInput.value || undefined, // 如果为空字符串，则发送 undefined
+                    sortBy,
+                    startDate: startDateInput.value || undefined,
                     endDate: endDateInput.value || undefined
                 }
             });
@@ -154,12 +154,12 @@ document.addEventListener('DOMContentLoaded', function() {
     prevPageBtn.addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
-            loadUsers(currentPage);
+            loadUsers(currentPage, currentSortField);
         }
     });
 
     nextPageBtn.addEventListener('click', () => {
         currentPage++;
-        loadUsers(currentPage);
+        loadUsers(currentPage, currentSortField);
     });
 });

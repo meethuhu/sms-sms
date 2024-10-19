@@ -5,9 +5,13 @@ document.getElementById('login-btn').addEventListener('click', async () => {
         if (response.data.success) {
             window.location.href = '/@admin';
         } else {
-            alert('密码错误');
+            alert(response.data.message || '密码错误');
         }
     } catch (error) {
-        alert('登录失败');
+        if (error.response && error.response.status === 429) {
+            alert(error.response.data.message);
+        } else {
+            alert('登录失败');
+        }
     }
 });

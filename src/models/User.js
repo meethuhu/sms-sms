@@ -15,7 +15,13 @@ const User = sequelize.define('User', {
   lastLoginTime: {
     type: DataTypes.DATE,
     allowNull: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false
   }
+}, {
+  timestamps: false // 禁用 Sequelize 自动管理的 createdAt 和 updatedAt
 });
 
 module.exports = User;

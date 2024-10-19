@@ -15,13 +15,14 @@
             <button id="users-btn" class="nav-btn active">用户查询</button>
             <button id="netdisk-btn" class="nav-btn">网盘信息管理</button>
         </nav>
+        <hr>
         <div id="users-page" class="page">
             <div class="users-header">
                 <h1>用户查询</h1>
                 <div class="query-controls">
                     <select id="sort-select">
-                        <option value="lastLoginTime">登录时间降序</option>
                         <option value="createdAt">注册时间降序</option>
+                        <option value="lastLoginTime">登录时间降序</option>
                     </select>
                     <input type="date" id="start-date" placeholder="开始日期">
                     <input type="date" id="end-date" placeholder="结束日期">
