@@ -10,10 +10,6 @@ const NetdiskInfo = sequelize.define('NetdiskInfo', {
   share_link: {
     type: DataTypes.STRING(255),
     allowNull: false
-  },
-  password: {
-    type: DataTypes.STRING(50),
-    allowNull: true
   }
 }, {
   tableName: 'netdiskinfo',

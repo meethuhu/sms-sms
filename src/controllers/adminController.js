@@ -23,8 +23,8 @@ exports.login = (req, res) => {
 
 exports.updateNetdiskInfo = async (req, res) => {
     try {
-        const { share_link, password } = req.body;
-        await NetdiskInfo.update({ share_link, password }, { where: {} });
+        const { share_link } = req.body;
+        await NetdiskInfo.update({ share_link }, { where: {} });
         res.json({ message: '网盘信息更新成功' });
     } catch (error) {
         console.error('更新网盘信息失败:', error);

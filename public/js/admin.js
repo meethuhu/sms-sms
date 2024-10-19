@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const usersPage = document.getElementById('users-page');
     const updateNetdiskBtn = document.getElementById('update-netdisk-btn');
     const netdiskLinkInput = document.getElementById('netdisk-link');
-    const sharePasswordInput = document.getElementById('share-password');
     const usersTable = document.getElementById('users-table').getElementsByTagName('tbody')[0];
     const prevPageBtn = document.getElementById('prev-page');
     const nextPageBtn = document.getElementById('next-page');
@@ -46,9 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateNetdiskBtn.addEventListener('click', async () => {
         const share_link = netdiskLinkInput.value;
-        const password = sharePasswordInput.value;
         try {
-            const response = await axios.post('/api/admin/update-netdisk', { share_link, password });
+            const response = await axios.post('/api/admin/update-netdisk', { share_link });
             alert(response.data.message);
         } catch (error) {
             alert('更新失败: ' + error.response.data.message);
