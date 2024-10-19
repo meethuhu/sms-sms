@@ -9,8 +9,7 @@ CREATE TABLE IF NOT EXISTS Users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   phoneNumber VARCHAR(20) NOT NULL UNIQUE,
   lastLoginTime DATETIME NOT NULL,
-  createdAt DATETIME NOT NULL,
-  updatedAt DATETIME NOT NULL
+  createdAt DATETIME NOT NULL
 );
 
 -- 创建短信日志表
@@ -40,12 +39,11 @@ CREATE PROCEDURE generate_test_users()
 BEGIN
   DECLARE i INT DEFAULT 0;
   WHILE i < 1000 DO
-    INSERT INTO Users (phoneNumber, lastLoginTime, createdAt, updatedAt)
+    INSERT INTO Users (phoneNumber, lastLoginTime, createdAt)
     VALUES (
       CONCAT('1', LPAD(FLOOR(RAND() * 1000000000), 10, '0')),
       DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 365) DAY),
-      DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 365) DAY),
-      NOW()
+      DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 365) DAY)
     );
     SET i = i + 1;
   END WHILE;
