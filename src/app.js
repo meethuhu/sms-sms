@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -6,7 +7,6 @@ const netdiskRoutes = require('./routes/netdisk');
 const sequelize = require('./config/database');
 const NetdiskInfo = require('./models/NetdiskInfo');
 const adminRoutes = require('./routes/admin');
-require('dotenv').config();
 
 const app = express();
 
@@ -48,8 +48,14 @@ const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   try {
+    console.log('正在连接到数据库...');
+    // console.log(`数据库主机: ${process.env.DB_HOST}`);
+    // console.log(`数据库用户: ${process.env.DB_USER}`);
+    // console.log(`数据库名称: ${process.env.DB_NAME}`);
     await sequelize.authenticate();
+    console.log('数据库连接成功');
     await sequelize.sync();
+    console.log('数据库同步完成');
     
     app.listen(PORT, () => {
       console.log(`服务器运行在 http://localhost:${PORT}`);
