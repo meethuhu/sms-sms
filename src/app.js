@@ -49,11 +49,8 @@ const PORT = process.env.PORT || 3000;
 async function startServer() {
   try {
     await sequelize.authenticate();
-    console.log('数据库连接成功');
-    
     await sequelize.sync();
-    console.log('数据库同步完成');
-
+    
     app.listen(PORT, () => {
       console.log(`服务器运行在 http://localhost:${PORT}`);
     });
